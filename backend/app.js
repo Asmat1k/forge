@@ -1,13 +1,13 @@
-import { login } from './modules/tasks/login.js';
 import { routes } from './http/routes.js';
 import { reply } from './http/response.js';
+import { AUTHOR, BASE_URL } from './constants.js';
 
 export async function handleRequest(req, res) {
   console.info(`[app] Set default headers`);
-  res.setHeader('X-Author', login);
+  res.setHeader('X-Author', AUTHOR);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', '*');
-  const path = new URL(req.url, 'http://localhost').pathname;
+  const path = new URL(req.url, BASE_URL).pathname;
 
   try {
     console.info(`[app] Get handler`);
