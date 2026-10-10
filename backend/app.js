@@ -7,17 +7,17 @@ export async function handleRequest(req, res) {
   res.setHeader('X-Author', AUTHOR);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', '*');
-  const path = new URL(req.url, BASE_URL).pathname;
 
   try {
     console.info(`[app] Get handler`);
+    const path = new URL(req.url, BASE_URL).pathname;
     const handler = routes.get(`${req.method} ${path}`);
     if (handler) {
       console.info(`[app] Has handler - ${handler}`);
       return await handler(req, res);
     }
 
-    console.info(`[app] Has no handler`);
+    console.error(`[app] Has no handler`);
     reply(res, 404, 'Not found');
   } catch (error) {
     console.error(`[app] ${error}`);
