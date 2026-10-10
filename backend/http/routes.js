@@ -14,5 +14,6 @@ export const routes = new Map([
   ['GET /promise', (req, res) => reply(res, STATUS.OK, promise.toString())],
   ['POST /zipper', zipper],
   ['POST /decypher', decypher],
+  ['POST /size2json', size2json],
   ['POST /size2json/', size2json],
 ]);
