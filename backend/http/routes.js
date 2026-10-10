@@ -4,8 +4,10 @@ import { zipper } from '../modules/tasks/zipper.js';
 import { decypher } from '../modules/tasks/decypher.js';
 import { reply } from './response.js';
 import { AUTHOR, STATUS } from '../constants.js';
+import { getPagesRoutes } from '../modules/pages/pages.js';
 
 export const routes = new Map([
+  ...getPagesRoutes,
   ['GET /login', (req, res) => reply(res, STATUS.OK, AUTHOR)],
   ['GET /sample', (req, res) => reply(res, STATUS.OK, sample.toString())],
   ['GET /promise', (req, res) => reply(res, STATUS.OK, promise.toString())],
