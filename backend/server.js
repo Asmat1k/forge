@@ -5,5 +5,6 @@ import { handleRequest } from './app.js';
 export const server = createServer(handleRequest);
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  server.listen(3000, () => console.log('http://localhost:3000'));
+  const port = Number(process.env.PORT || 3000);
+  server.listen(port, '0.0.0.0', () => console.log(`Server listening on port ${port}`));
 }
