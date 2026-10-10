@@ -1,6 +1,6 @@
 import { gzip } from 'node:zlib';
 import { promisify } from 'node:util';
-import { reply } from '../api/response.js';
+import { reply } from '../../http/response.js';
 
 const compress = promisify(gzip);
 
