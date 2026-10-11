@@ -13,7 +13,7 @@ export async function size2json(req, res) {
 
   const file = getFile(form, 'image');
   if (!file) return reply(res, STATUS.BAD_REQUEST, 'Missing image field');
-  const header = Buffer.from(await file.slice(0, PNG_HEADER_BYTES).arrayBuffer());
+  const header = file.subarray(0, PNG_HEADER_BYTES);
   if (header.length < PNG_HEADER_BYTES || !header.subarray(0, PNG_SIGNATURE.length).equals(PNG_SIGNATURE)) {
     return reply(res, STATUS.BAD_REQUEST, 'Expected a PNG image');
   }

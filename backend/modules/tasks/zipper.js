@@ -13,7 +13,7 @@ export async function zipper(req, res) {
   const file = getFile(form, 'file');
   if (!file) return reply(res, STATUS.BAD_REQUEST, 'Missing file field');
 
-  const result = await compress(Buffer.from(await file.arrayBuffer()));
+  const result = await compress(file);
   res.setHeader('Content-Disposition', 'attachment; filename="result.gz"');
   reply(res, STATUS.OK, result, 'application/gzip');
 }

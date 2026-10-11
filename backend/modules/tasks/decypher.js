@@ -16,8 +16,8 @@ export async function decypher(req, res) {
     const result = privateDecrypt({
       padding: constants.RSA_PKCS1_OAEP_PADDING,
       oaepHash: 'sha1',
-      key: Buffer.from(await key.arrayBuffer()),
-    }, Buffer.from(await secret.arrayBuffer()));
+      key,
+    }, secret);
     reply(res, STATUS.OK, result.toString('utf8'));
   } catch {
     return reply(res, STATUS.BAD_REQUEST, 'Invalid key or secret');

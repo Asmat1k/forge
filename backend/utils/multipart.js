@@ -1,9 +1,10 @@
-import { BASE_URL, CONTENT_TYPE_HEADER, MAX_UPLOAD_BYTES, STATUS } from '../constants.js';
+import busboy from 'busboy';
+import { CONTENT_TYPE_HEADER, MAX_UPLOAD_BYTES, STATUS } from '../constants.js';
 import { reply } from '../http/response.js';
 
 export async function readMultipart(req, res) {
   const contentType = req.headers[CONTENT_TYPE_HEADER.toLowerCase()] || '';
-  if (!/^multipart\/form-data(?:;|$)/i.test(contentType)) {
+  if (contentType.split(';', 1)[0].toLowerCase() !== 'multipart/form-data') {
     reply(res, STATUS.BAD_REQUEST, 'Expected a multipart file upload');
     return;
   }
@@ -20,11 +21,27 @@ export async function readMultipart(req, res) {
     chunks.push(chunk);
   }
   try {
-    return await new Request(BASE_URL, {
-      method: req.method,
-      headers: { [CONTENT_TYPE_HEADER]: contentType },
-      body: Buffer.concat(chunks),
-    }).formData();
+    return await new Promise((resolve, reject) => {
+      const parser = busboy({ headers: req.headers });
+      const form = new Map();
+      parser.on('field', (name, value) => {
+        if (!form.has(name)) form.set(name, value);
+      });
+      parser.on('file', (name, file) => {
+        file.on('error', reject);
+        if (form.has(name)) {
+          file.resume();
+          return;
+        }
+        form.set(name, null);
+        const chunks = [];
+        file.on('data', chunk => chunks.push(chunk));
+        file.on('end', () => form.set(name, Buffer.concat(chunks)));
+      });
+      parser.on('error', reject);
+      parser.on('close', () => resolve(form));
+      parser.end(Buffer.concat(chunks));
+    });
   } catch {
     reply(res, STATUS.BAD_REQUEST, 'Invalid multipart form');
   }
@@ -32,5 +49,5 @@ export async function readMultipart(req, res) {
 
 export function getFile(form, name) {
   const file = form.get(name);
-  return file && typeof file !== 'string' ? file : null;
+  return Buffer.isBuffer(file) ? file : null;
 }
