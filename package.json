@@ -3,15 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.js",
-    "start": "node backend/server.js",
-    "dev": "node --watch backend/server.js",
+    "dev": "npm run dev:backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "dev:backend": "npm run dev --workspace backend",
+    "build": "npm run build --workspace frontend",
+    "start": "npm run start --workspace backend",
     "test": "node --test"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.19"
   },
-  "dependencies": {
-    "busboy": "^1.6.0"
-  }
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
 }

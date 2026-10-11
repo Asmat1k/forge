@@ -1,0 +1,13 @@
+{
+  "name": "@forge/backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0",
+    "express": "^5.1.0"
+  }
+}

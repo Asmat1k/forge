@@ -1,9 +1,9 @@
 import { createServer } from 'node:http';
 import { errorMonitor } from 'node:events';
 import { pathToFileURL } from 'node:url';
-import { handleRequest } from './app.js';
+import { app } from './app.js';
 
-export const server = createServer(handleRequest);
+export const server = createServer(app);
 server.on(errorMonitor, (error) => console.error('[server] Server error', error));
 server.on('close', () => console.info('[server] Server closed'));
 

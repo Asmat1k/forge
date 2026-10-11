@@ -1,11 +1,10 @@
 import busboy from 'busboy';
-import { CONTENT_TYPE_HEADER, MAX_UPLOAD_BYTES, STATUS } from '../constants.js';
-import { reply } from '../http/response.js';
+import { MAX_UPLOAD_BYTES } from '../constants.js';
 
 export async function readMultipart(req, res) {
-  const contentType = req.headers[CONTENT_TYPE_HEADER.toLowerCase()] || '';
+  const contentType = req.headers['content-type'] || '';
   if (contentType.split(';', 1)[0].toLowerCase() !== 'multipart/form-data') {
-    reply(res, STATUS.BAD_REQUEST, 'Expected a multipart file upload');
+    res.status(400).type('text/plain').send('Expected a multipart file upload');
     return;
   }
 
@@ -14,7 +13,7 @@ export async function readMultipart(req, res) {
   for await (const chunk of req) {
     size += chunk.length;
     if (size > MAX_UPLOAD_BYTES) {
-      reply(res, 413, 'Upload must be at most 1 MiB including form data');
+      res.status(413).type('text/plain').send('Upload must be at most 1 MiB including form data');
       req.resume();
       return;
     }
@@ -43,7 +42,7 @@ export async function readMultipart(req, res) {
       parser.end(Buffer.concat(chunks));
     });
   } catch {
-    reply(res, STATUS.BAD_REQUEST, 'Invalid multipart form');
+    res.status(400).type('text/plain').send('Invalid multipart form');
   }
 }
 
