@@ -1,4 +1,5 @@
 import express from 'express';
+import { fileURLToPath } from 'node:url';
 import { routes } from './routes/index.js';
 import { AUTHOR } from './constants.js';
 
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 
 app.use('/api', routes);
 app.use('/', routes);
+app.use(express.static(fileURLToPath(new URL('../public/', import.meta.url))));
 app.use((req, res) => res.status(404).type('text/plain').send('Not found'));
 app.use((error, req, res, next) => {
   console.error('[app]', error);
