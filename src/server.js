@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { errorMonitor } from 'node:events';
 import { pathToFileURL } from 'node:url';
-import { app } from './app.js';
+import { app } from './index.js';
 
 export const server = createServer(app);
 server.on(errorMonitor, (error) => console.error('[server] Server error', error));
