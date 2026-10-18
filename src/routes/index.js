@@ -8,6 +8,7 @@ import { AUTHOR } from '../constants.js';
 
 export function createRoutes(express, bodyParser, createReadStream, crypto, http, codePath) {
   const routes = express.Router();
+
   routes.get('/login/', (req, res) => res.type('text/plain').send(AUTHOR));
   routes.get('/code/', (req, res, next) => {
     res.type('text/plain');
@@ -28,5 +29,6 @@ export function createRoutes(express, bodyParser, createReadStream, crypto, http
   routes.post('/zipper/', zipper);
   routes.post('/decypher/', decypher);
   routes.post('/size2json/', size2json);
+
   return routes;
 }

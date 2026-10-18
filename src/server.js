@@ -4,10 +4,8 @@ import { pathToFileURL } from 'node:url';
 import { app } from './index.js';
 
 export const server = createServer(app);
-server.on(errorMonitor, (error) => console.error('[server] Server error', error));
-server.on('close', () => console.info('[server] Server closed'));
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const port = Number(process.env.PORT || 3000);
-  server.listen(port, '0.0.0.0', () => console.info('[server] Server listening', server.address()));
+  server.listen(port, '0.0.0.0');
 }

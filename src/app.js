@@ -26,10 +26,5 @@ export default function createApp(express, bodyParser, createReadStream, crypto,
   app.use('/api', routes);
   app.use('/', routes);
   app.all('/{*path}', (req, res) => res.type('text/plain').send(AUTHOR));
-  app.use((error, req, res, next) => {
-    console.error('[app]', error);
-    if (res.headersSent) return next(error);
-    res.status(500).type('text/plain').send('Internal server error');
-  });
   return app;
 }
